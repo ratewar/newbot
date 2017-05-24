@@ -20,6 +20,7 @@ public class LambdaHook implements RequestHandler<Map<String, Object>,String> {
 	 * @return String containing the context parameters.
 	 */
 	  public static String contextToString(Context context) {
+		  //this is a sample code
 	    StringBuilder sb = new StringBuilder();
 	    sb.append("{awsRequestId=").append(context.getAwsRequestId()).append("},");
 	    sb.append("{functionName=").append(context.getFunctionName()).append("},");
