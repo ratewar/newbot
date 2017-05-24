@@ -12,6 +12,7 @@ public class LambdaHook implements RequestHandler<Map<String, Object>,String> {
 	public String handleRequest(Map<String, Object> input, Context context) {
 		LambdaLogger logger = context.getLogger();
 	    logger.log("Hello World");
+	    logger.log("This is a Developer 2");
 		return null;
 	}
 	/**
