@@ -1,25 +1,56 @@
 package com.tech.unleashed.pojo;
 
+import java.util.Map;
+
 public class Request {
-	private String val1; 
-	private int val2;
-	private String val3;
-	public String getVal1() {
-		return val1;
+	private CurrentIntent currentIntent;
+	private Bot bot;
+	private String userId;
+	private String invocationSource;
+	private String outputDialogMode;
+	private String messageVersion;
+	private Map<String,String> sessionAttributes;
+	
+	public CurrentIntent getCurrentIntent() {
+		return currentIntent;
 	}
-	public void setVal1(String val1) {
-		this.val1 = val1;
+	public void setCurrentIntent(CurrentIntent currentIntent) {
+		this.currentIntent = currentIntent;
 	}
-	public int getVal2() {
-		return val2;
+	public Bot getBot() {
+		return bot;
 	}
-	public void setVal2(int val2) {
-		this.val2 = val2;
+	public void setBot(Bot bot) {
+		this.bot = bot;
 	}
-	public String getVal3() {
-		return val3;
+	public String getUserId() {
+		return userId;
 	}
-	public void setVal3(String val3) {
-		this.val3 = val3;
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	public String getInvocationSource() {
+		return invocationSource;
+	}
+	public void setInvocationSource(String invocationSource) {
+		this.invocationSource = invocationSource;
+	}
+	public String getOutputDialogMode() {
+		return outputDialogMode;
+	}
+	public void setOutputDialogMode(String outputDialogMode) {
+		this.outputDialogMode = outputDialogMode;
+	}
+	public String getMessageVersion() {
+		return messageVersion;
+	}
+	public void setMessageVersion(String messageVersion) {
+		this.messageVersion = messageVersion;
+	}
+	public Map<String, String> getSessionAttributes() {
+		return sessionAttributes;
+	}
+	public void setSessionAttributes(Map<String, String> sessionAttributes) {
+		this.sessionAttributes = sessionAttributes;
 	}
 }

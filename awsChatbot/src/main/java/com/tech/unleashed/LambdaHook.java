@@ -2,6 +2,7 @@ package com.tech.unleashed;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
@@ -73,12 +74,24 @@ public class LambdaHook implements RequestHandler<Request, Response> {
 		
 	}
 	@Override
-	public Response handleRequest(Request objRequest, Context context) {
+	public Response handleRequest(Request requestObject, Context context) {
 		LambdaLogger logger = context.getLogger();
-	    logger.log("This is a val-1" + objRequest.getVal1());
-	    logger.log("This is a val-2" + objRequest.getVal2());
-	    logger.log("This is a val-3" + objRequest.getVal3());
-	    Response objResponse = new Response();
+		logger.log("Flower Type : " + requestObject.getCurrentIntent().getSlots().getFlowerType());
+		logger.log("Pick up Time: " + requestObject.getCurrentIntent().getSlots().getPickupTime());
+		logger.log("Pick up Date : " + requestObject.getCurrentIntent().getSlots().getPickupDate().toString());
+		logger.log("Name : " + requestObject.getCurrentIntent().getName());
+		logger.log("Confirmation Status : " + requestObject.getCurrentIntent().getConfirmationStatus());
+		Map<String,String> sessionAttributes = requestObject.getSessionAttributes();
+		if(sessionAttributes != null && !sessionAttributes.isEmpty())
+		{
+			Set<String> keySet = sessionAttributes.keySet();
+			for(String key : keySet)
+			{
+				String value = sessionAttributes.get(key);
+				logger.log("Session Attribute Key : " + key + " Value : " + value);
+			}
+		}
+		Response objResponse = new Response();
 	    objResponse.setName1("Vikas Bajaj");
 	    objResponse.setName2(10101976);
 	    contextToString(context);
