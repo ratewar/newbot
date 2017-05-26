@@ -1,6 +1,6 @@
 package com.tech.unleashed.pojo;
 
-public class Slot {
+public class Slots {
 	private String PickupDate;
 	private String PickupTime;
 	private String FlowerType;
