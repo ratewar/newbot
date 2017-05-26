@@ -1,18 +1,36 @@
 package com.tech.unleashed.pojo;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Response {
-	private String name1;
-	private int name2;
-	public String getName1() {
-		return name1;
+
+	private SessionAttributes sessionAttributes;
+	private DialogAction dialogAction;
+	private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
+	public SessionAttributes getSessionAttributes() {
+		return sessionAttributes;
 	}
-	public void setName1(String name1) {
-		this.name1 = name1;
+
+	public void setSessionAttributes(SessionAttributes sessionAttributes) {
+		this.sessionAttributes = sessionAttributes;
 	}
-	public int getName2() {
-		return name2;
+
+	public DialogAction getDialogAction() {
+		return dialogAction;
 	}
-	public void setName2(int name2) {
-		this.name2 = name2;
+
+	public void setDialogAction(DialogAction dialogAction) {
+		this.dialogAction = dialogAction;
 	}
+
+	public Map<String, Object> getAdditionalProperties() {
+		return this.additionalProperties;
+	}
+
+	public void setAdditionalProperty(String name, Object value) {
+		this.additionalProperties.put(name, value);
+	}
+
 }
