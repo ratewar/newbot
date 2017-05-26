@@ -14,3 +14,6 @@ aws lambda delete-function  --function-name awschatbot  --region us-east-1
 
 
 To test this function use the Lambda sample event for ordering flowers. Note - in JSON PickupDate, PickupTime, FlowerType need to be modified as pickUpDate, pickUpTime, flowerType as json must follow bean naming conventions (camel case).
+
+
+Generate Java Classes using JSON [http://www.jsonschema2pojo.org/]
