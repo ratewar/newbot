@@ -20,36 +20,33 @@ import com.tech.unleashed.pojo.response.ValidationResult;
 
 public class LambdaHook implements RequestHandler<Request, Response> {
 	LambdaLogger logger;
-	private ValidationResult validateOrderFlowers(String flowerType, String date, String time){
+	public ValidationResult validateOrderFlowers(String flowerType, String date, String time){
 		List<String> flowerTypes = getFlowerTypes();
-		if (flowerType == null || !flowerTypes.contains(flowerType.toLowerCase()))
-		{
-	        return buildValidationResult(false, "FlowerType", "We do not have " + flowerType + ", would you like a different type of flower?  Our most popular flowers are roses");
-	    }
-		if (date != null && date.trim().length() > 0)
-		{
-	        if (!isValidDate(date))
-	        {
-	            return buildValidationResult(false, "PickupDate", "I did not understand that, what date would you like to pick the flowers up?");
-	        }
-	        if (parseDate(date).compareTo(new Date()) == -1 || parseDate(date).compareTo(new Date()) ==0)
-	        {
-	            return buildValidationResult(false, "PickupDate", "You can pick up the flowers from tomorrow onwards.  What day would you like to pick them up?");
-	        }
-	    }
-		if (time != null && time.trim().length() > 0)
-		{
-	        if (time.length() != 5) {
-	            // Not a valid time; use a prompt defined on the build-time model.
-	            return buildValidationResult(false, "PickupTime", null);
-	        }
-	        String[] timeArray = time.split(":");
-	        int hour = Integer.parseInt(timeArray[0]);
-	        int minute = Integer.parseInt(timeArray[1]);
-	        if (hour < 10 || hour > 16) {
-	            // Outside of business hours
-	            return buildValidationResult(false, "PickupTime", "Our business hours are from ten a m. to five p m. Can you specify a time during this range?");
-	        }
+		if (flowerType == null || !flowerTypes.contains(flowerType.toLowerCase())){
+			return buildValidationResult(false, "FlowerType", "We do not have " + flowerType + ", would you like a different type of flower?  Our most popular flowers are roses");
+		}
+		if (date != null && date.trim().length() > 0){
+			if (!isValidDate(date))
+			{
+				return buildValidationResult(false, "PickupDate", "I did not understand that, what date would you like to pick the flowers up?");
+			}
+			if (parseDate(date).compareTo(new Date()) == -1 || parseDate(date).compareTo(new Date()) ==0)
+			{
+				return buildValidationResult(false, "PickupDate", "You can pick up the flowers from tomorrow onwards.  What day would you like to pick them up?");
+			}
+		}
+		if (time != null && time.trim().length() > 0){
+			if (time.length() != 5) {
+				// Not a valid time; use a prompt defined on the build-time model.
+				return buildValidationResult(false, "PickupTime", null);
+			}
+			String[] timeArray = time.split(":");
+			int hour = Integer.parseInt(timeArray[0]);
+			int minute = Integer.parseInt(timeArray[1]);
+			if (hour < 10 || hour > 16) {
+				// Outside of business hours
+				return buildValidationResult(false, "PickupTime", "Our business hours are from ten a m. to five p m. Can you specify a time during this range?");
+			}
 		}
 		return buildValidationResult(true, null, null);
 	}
@@ -60,26 +57,26 @@ public class LambdaHook implements RequestHandler<Request, Response> {
 		flowerTypes.add("tulips");
 		return flowerTypes;
 	}
-	private boolean isValidDate(String date) {
-	    try {
-	    	parseDate(date);
-	    	return true;
-	    } catch (Exception e) {
-	        return false;
-	    }
+	public boolean isValidDate(String date) {
+		try {
+			parseDate(date);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
-	private Date parseDate(String date) {
+	public Date parseDate(String date) {
 		Date date1 = null;
 		try {
-	    	date1 = new SimpleDateFormat("dd-MMM-yyyy").parse(date);
-	    } catch (Exception e) {
+			date1 = new SimpleDateFormat("dd-MMM-yyyy").parse(date);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return date1;
 	}
 	private ValidationResult buildValidationResult(boolean isValid, String violatedSlot, String messageContent) {
 		ValidationResult validationResult = new ValidationResult();
-		
+
 		if(messageContent != null)
 		{
 			Message message = new Message();
@@ -93,8 +90,8 @@ public class LambdaHook implements RequestHandler<Request, Response> {
 	}
 	/**
 	 * Performs dialog management and fulfillment for ordering flowers.
-     * Beyond fulfillment, the implementation of this intent demonstrates the use of the elicitSlot dialog action
-     * in slot validation and re-prompting.
+	 * Beyond fulfillment, the implementation of this intent demonstrates the use of the elicitSlot dialog action
+	 * in slot validation and re-prompting.
 	 * @param requestObject
 	 * @return responseObject
 	 */
@@ -121,11 +118,11 @@ public class LambdaHook implements RequestHandler<Request, Response> {
 				{
 					slots.setPickupTime(null);
 				}
-				return elicitSlot(requestObject.getSessionAttributes(), 
-									requestObject.getCurrentIntent().getName(),
-									slots, 
-									validationResult.getViolatedSlot(),
-									validationResult.getMessage());
+				return elicitSlot(requestObject.getSessionAttributes(),
+						requestObject.getCurrentIntent().getName(),
+						slots,
+						validationResult.getViolatedSlot(),
+						validationResult.getMessage());
 			}
 			Map<String,String> outputSessionAttributes = requestObject.getSessionAttributes();
 			if(flowerType != null && flowerType.trim().length() > 0)
@@ -133,47 +130,41 @@ public class LambdaHook implements RequestHandler<Request, Response> {
 				String price = String.valueOf(flowerType.length() * 5);
 				outputSessionAttributes.put("Price", price); // Elegant pricing model
 			}
+			return delegate(outputSessionAttributes, slots);
 
-			Response delegate = delegate(outputSessionAttributes, requestObject.getCurrentIntent().getSlots());
-			return delegate;
 		}
-
-		Message fullFillmsg=new Message();
-		fullFillmsg.setContentType("PlainText");
-		fullFillmsg.setContent("Thanks, for your order");
-
-		Response close = close(requestObject.getSessionAttributes(), "Fulfilled", fullFillmsg);
-		return close;
+		return close(requestObject.getSessionAttributes(),
+				"Fulfilled",
+				"Thanks, your order for " + flowerType + " has been placed and will be ready for pickup by " + time + " on " + date);
 	}
-	private Response delegate(Map<String, String> sessionAttributes, Slots slots) {
-		// TODO Auto-generated method stub
-
-		Response responseObject = new Response();
-		responseObject.setSessionAttributes(sessionAttributes);
-		DialogAction dialogAction = new DialogAction();
-		dialogAction.setType("Delegate");
-		dialogAction.setSlots(slots);
-		responseObject.setDialogAction(dialogAction);
-		return responseObject;
-	}
-
-	private Response close(Map<String, String> sessionAttributes, String fulfillmentState,Message message)
+	public Response close(Map<String, String> outputSessionAttributes, String fulfillmentState,String messageContent)
 	{
 		Response responseObject = new Response();
-		responseObject.setSessionAttributes(sessionAttributes);
+		responseObject.setSessionAttributes(outputSessionAttributes);
 		DialogAction dialogAction = new DialogAction();
-		dialogAction.setType("Close");
+		dialogAction.setType(DialogActionTypeEnum.CLOSE.getType());
 		dialogAction.setFulfillmentState(fulfillmentState);
+		Message message = new Message();
+		message.setContentType("Plain/Text");
+		message.setContent("messageContent");
 		dialogAction.setMessage(message);
 		responseObject.setDialogAction(dialogAction);
 		return responseObject;
 	}
-
-	private Response elicitSlot(Map<String, String> sessionAttributes,
-													String intentName,
-													Slots slots,
-													String violatedSlot,
-													Message message) {
+	public Response delegate(Map<String, String> outputSessionAttributes, Slots slots) {
+		Response responseObject = new Response();
+		responseObject.setSessionAttributes(outputSessionAttributes);
+		DialogAction dialogAction = new DialogAction();
+		dialogAction.setType(DialogActionTypeEnum.DELEGATE.getType());
+		dialogAction.setSlots(slots);
+		responseObject.setDialogAction(dialogAction);
+		return responseObject;
+	}
+	public Response elicitSlot(Map<String, String> sessionAttributes,
+							   String intentName,
+							   Slots slots,
+							   String violatedSlot,
+							   Message message) {
 		Response responseObject = new Response();
 		responseObject.setSessionAttributes(sessionAttributes);
 		DialogAction dialogAction = new DialogAction();
@@ -182,6 +173,7 @@ public class LambdaHook implements RequestHandler<Request, Response> {
 		dialogAction.setSlots(slots);
 		dialogAction.setSlotToElicit(violatedSlot);
 		dialogAction.setMessage(message);
+		responseObject.setDialogAction(dialogAction);
 		return responseObject;
 	}
 	public Response dispatch(Request requestObject){
@@ -189,7 +181,7 @@ public class LambdaHook implements RequestHandler<Request, Response> {
 		logger.log("Method dispatch - " + requestObject.getUserId() + " CurrentIntent : " + intentName);
 		if(intentName != null && intentName.equalsIgnoreCase("OrderFlowers"))
 		{
-			return orderFlowers(requestObject); 
+			return orderFlowers(requestObject);
 		}
 		throw new RuntimeException("Intent with name - " + intentName + " not supported");
 	}
@@ -205,24 +197,23 @@ public class LambdaHook implements RequestHandler<Request, Response> {
 		}
 		return responseObject;
 	}
-	
+
 	/**
 	 * Converts the context to a String.
 	 * @param context Context to be converted.
 	 * @return String containing the context parameters.
 	 */
-	  public static String contextToString(Context context) {
-		  //this is a sample code
-	    StringBuilder sb = new StringBuilder();
-	    sb.append("{awsRequestId=").append(context.getAwsRequestId()).append("},");
-	    sb.append("{functionName=").append(context.getFunctionName()).append("},");
-	    sb.append("{functionVersion=").append(context.getFunctionVersion()).append("},");
-	    sb.append("{invokedFunctionArn=").append(context.getInvokedFunctionArn()).append("},");
-	    sb.append("{logGroupName=").append(context.getLogGroupName()).append("},");
-	    sb.append("{logStreamName=").append(context.getLogStreamName()).append("},");
-	    sb.append("{memoryLimitMB=").append(context.getMemoryLimitInMB()).append("},");
-	    sb.append("{remainingTimeInMillis=").append(context.getRemainingTimeInMillis()).append("}");
-	    return sb.toString();
-	  }
+	public static String contextToString(Context context) {
+		//this is a sample code
+		StringBuilder sb = new StringBuilder();
+		sb.append("{awsRequestId=").append(context.getAwsRequestId()).append("},");
+		sb.append("{functionName=").append(context.getFunctionName()).append("},");
+		sb.append("{functionVersion=").append(context.getFunctionVersion()).append("},");
+		sb.append("{invokedFunctionArn=").append(context.getInvokedFunctionArn()).append("},");
+		sb.append("{logGroupName=").append(context.getLogGroupName()).append("},");
+		sb.append("{logStreamName=").append(context.getLogStreamName()).append("},");
+		sb.append("{memoryLimitMB=").append(context.getMemoryLimitInMB()).append("},");
+		sb.append("{remainingTimeInMillis=").append(context.getRemainingTimeInMillis()).append("}");
+		return sb.toString();
+	}
 }
-

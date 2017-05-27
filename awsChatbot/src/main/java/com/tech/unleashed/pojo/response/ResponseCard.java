@@ -9,8 +9,6 @@ public class ResponseCard {
 	private Integer version;
 	private String contentType;
 	private List<GenericAttachment> genericAttachments = null;
-	private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-
 	public Integer getVersion() {
 		return version;
 	}
@@ -34,13 +32,4 @@ public class ResponseCard {
 	public void setGenericAttachments(List<GenericAttachment> genericAttachments) {
 		this.genericAttachments = genericAttachments;
 	}
-
-	public Map<String, Object> getAdditionalProperties() {
-		return this.additionalProperties;
-	}
-
-	public void setAdditionalProperty(String name, Object value) {
-		this.additionalProperties.put(name, value);
-	}
-
 }

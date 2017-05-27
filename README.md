@@ -1,4 +1,4 @@
-# newbot
+# Newbot
 
 Use the following AWS CLI command to create bot lambda function 
 -----------------------------------------------------------------
