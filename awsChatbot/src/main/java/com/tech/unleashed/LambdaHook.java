@@ -133,14 +133,35 @@ public class LambdaHook implements RequestHandler<Request, Response> {
 				String price = String.valueOf(flowerType.length() * 5);  
 				outputSessionAttributes.put("Price", price); // Elegant pricing model
 			}
-			delegate(outputSessionAttributes, requestObject.getCurrentIntent().getSlots());
-			return;
+			return delegate(outputSessionAttributes, slots);
+			
 		}
-		close(requestObject.getSessionAttributes(), "Fulfilled",  { contentType: 'PlainText', content: `Thanks, your order for ${flowerType} has been placed and will be ready for pickup by ${time} on ${date}` }));
+		return close(requestObject.getSessionAttributes(), 
+						"Fulfilled",
+						"Thanks, your order for " + flowerType + " has been placed and will be ready for pickup by " + time + " on " + date);
 	}
-	private void delegate(Map<String, String> outputSessionAttributes, Slot slots) {
-		// TODO Auto-generated method stub
-		
+	private Response close(Map<String, String> outputSessionAttributes, String fulfillmentState,String messageContent)
+	{
+		Response responseObject = new Response();
+		responseObject.setSessionAttributes(outputSessionAttributes);
+		DialogAction dialogAction = new DialogAction();
+		dialogAction.setType(DialogActionTypeEnum.CLOSE.getType());
+		dialogAction.setFulfillmentState(fulfillmentState);
+		Message message = new Message();
+		message.setContentType("Plain/Text");
+		message.setContent("messageContent");
+		dialogAction.setMessage(message);
+		responseObject.setDialogAction(dialogAction);
+		return responseObject;
+	}
+	private Response delegate(Map<String, String> outputSessionAttributes, Slots slots) {
+		Response responseObject = new Response();
+		responseObject.setSessionAttributes(outputSessionAttributes);
+		DialogAction dialogAction = new DialogAction();
+		dialogAction.setType(DialogActionTypeEnum.DELEGATE.getType());
+		dialogAction.setSlots(slots);
+		responseObject.setDialogAction(dialogAction);
+		return responseObject;
 	}
 	private Response elicitSlot(Map<String, String> sessionAttributes,
 													String intentName,
@@ -155,6 +176,7 @@ public class LambdaHook implements RequestHandler<Request, Response> {
 		dialogAction.setSlots(slots);
 		dialogAction.setSlotToElicit(violatedSlot);
 		dialogAction.setMessage(message);
+		responseObject.setDialogAction(dialogAction);
 		return responseObject;
 	}
 	public Response dispatch(Request requestObject){
