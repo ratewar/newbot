@@ -22,12 +22,10 @@ public class LambdaHook implements RequestHandler<Request, Response> {
 	LambdaLogger logger;
 	private ValidationResult validateOrderFlowers(String flowerType, String date, String time){
 		List<String> flowerTypes = getFlowerTypes();
-		if (flowerType == null || !flowerTypes.contains(flowerType.toLowerCase()))
-		{
+		if (flowerType == null || !flowerTypes.contains(flowerType.toLowerCase())){
 	        return buildValidationResult(false, "FlowerType", "We do not have " + flowerType + ", would you like a different type of flower?  Our most popular flowers are roses");
 	    }
-		if (date != null && date.trim().length() > 0)
-		{
+		if (date != null && date.trim().length() > 0){
 	        if (!isValidDate(date))
 	        {
 	            return buildValidationResult(false, "PickupDate", "I did not understand that, what date would you like to pick the flowers up?");
@@ -37,8 +35,7 @@ public class LambdaHook implements RequestHandler<Request, Response> {
 	            return buildValidationResult(false, "PickupDate", "You can pick up the flowers from tomorrow onwards.  What day would you like to pick them up?");
 	        }
 	    }
-		if (time != null && time.trim().length() > 0)
-		{
+		if (time != null && time.trim().length() > 0){
 	        if (time.length() != 5) {
 	            // Not a valid time; use a prompt defined on the build-time model.
 	            return buildValidationResult(false, "PickupTime", null);
