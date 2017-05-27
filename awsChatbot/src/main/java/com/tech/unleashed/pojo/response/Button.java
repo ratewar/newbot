@@ -1,4 +1,4 @@
-package com.tech.unleashed.pojo;
+package com.tech.unleashed.pojo.response;
 
 import java.util.HashMap;
 import java.util.Map;

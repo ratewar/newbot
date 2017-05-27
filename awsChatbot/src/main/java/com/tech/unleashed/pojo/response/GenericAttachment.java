@@ -1,4 +1,4 @@
-package com.test.entity.response.format;
+package com.tech.unleashed.pojo.response;
 
 import java.util.HashMap;
 import java.util.List;

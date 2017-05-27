@@ -1,9 +1,9 @@
-package com.test.entity.response.format;
+package com.tech.unleashed.pojo.common;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Slots {
+public class SlotsG {
 
 	private String slotName;
 	private Map<String, Object> additionalProperties = new HashMap<String, Object>();

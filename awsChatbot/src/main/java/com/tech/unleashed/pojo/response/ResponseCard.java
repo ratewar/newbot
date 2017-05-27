@@ -1,13 +1,23 @@
-package com.test.entity.response.format;
+package com.tech.unleashed.pojo.response;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class Message {
+public class ResponseCard {
 
+	private Integer version;
 	private String contentType;
-	private String content;
+	private List<GenericAttachment> genericAttachments = null;
 	private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
 
 	public String getContentType() {
 		return contentType;
@@ -17,12 +27,12 @@ public class Message {
 		this.contentType = contentType;
 	}
 
-	public String getContent() {
-		return content;
+	public List<GenericAttachment> getGenericAttachments() {
+		return genericAttachments;
 	}
 
-	public void setContent(String content) {
-		this.content = content;
+	public void setGenericAttachments(List<GenericAttachment> genericAttachments) {
+		this.genericAttachments = genericAttachments;
 	}
 
 	public Map<String, Object> getAdditionalProperties() {

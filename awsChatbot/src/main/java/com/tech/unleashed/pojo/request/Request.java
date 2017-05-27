@@ -1,4 +1,4 @@
-package com.tech.unleashed.pojo;
+package com.tech.unleashed.pojo.request;
 
 import java.util.Map;
 
