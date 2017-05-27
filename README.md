@@ -1,22 +1,22 @@
 # Newbot
 
-#Use the following command to create Jar file which we can upload using AWS CLI
+# Use the following command to create Jar file which we can upload using AWS CLI
 -------------------------------------------------------------------------------
 mvn package shade:shade
 
-#Use the following command to create Jar file which we can upload using AWS CLI and also skip tests
+# Use the following command to create Jar file which we can upload using AWS CLI and also skip tests
 ----------------------------------------------------------------------------------------------------
 mvn package shade:shade -DskipTests
 
-#Use the following AWS CLI command to create bot lambda function
+# Use the following AWS CLI command to create bot lambda function
 -----------------------------------------------------------------
-#Change role arn and folder location according to you settings and configuration
+# Change role arn and folder location according to you settings and configuration
 ----------------------------------------------------------------------------------
 
 aws lambda create-function --region us-east-1 --function-name awschatbot --zip-file fileb://D:/git_repositories/git/newbot/awsChatbot/target/awsChatbot-1.0-SNAPSHOT.jar --role arn:aws:iam::512785838931:role/service-role/testhelloworld --handler com.tech.unleashed.LambdaHook::handleRequest --runtime java8
 
 
-#To Delete the bot function using AWS CLI use the follwoing command
+# To Delete the bot function using AWS CLI use the following command
 --------------------------------------------------------------------------
 aws lambda delete-function  --function-name awschatbot  --region us-east-1
 
@@ -24,4 +24,4 @@ aws lambda delete-function  --function-name awschatbot  --region us-east-1
 To test this function use the Lambda sample event for ordering flowers. Note - in JSON PickupDate, PickupTime, FlowerType need to be modified as pickUpDate, pickUpTime, flowerType as json must follow bean naming conventions (camel case).
 
 
-#Generate Java Classes using JSON [http://www.jsonschema2pojo.org/]
+# Generate Java Classes using JSON [http://www.jsonschema2pojo.org/]
