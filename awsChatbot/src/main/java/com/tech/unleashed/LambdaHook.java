@@ -130,18 +130,45 @@ public class LambdaHook implements RequestHandler<Request, Response> {
 			Map<String,String> outputSessionAttributes = requestObject.getSessionAttributes();
 			if(flowerType != null && flowerType.trim().length() > 0)
 			{
-				String price = String.valueOf(flowerType.length() * 5);  
+				String price = String.valueOf(flowerType.length() * 5);
 				outputSessionAttributes.put("Price", price); // Elegant pricing model
 			}
-			delegate(outputSessionAttributes, requestObject.getCurrentIntent().getSlots());
-			return;
+
+			Response delegate = delegate(outputSessionAttributes, requestObject.getCurrentIntent().getSlots());
+			return delegate;
 		}
-		close(requestObject.getSessionAttributes(), "Fulfilled",  { contentType: 'PlainText', content: `Thanks, your order for ${flowerType} has been placed and will be ready for pickup by ${time} on ${date}` }));
+
+		Message fullFillmsg=new Message();
+		fullFillmsg.setContentType("PlainText");
+		fullFillmsg.setContent("Thanks, for your order");
+
+		Response close = close(requestObject.getSessionAttributes(), "Fulfilled", fullFillmsg);
+		return close;
 	}
-	private void delegate(Map<String, String> outputSessionAttributes, Slot slots) {
+	private Response delegate(Map<String, String> sessionAttributes, Slots slots) {
 		// TODO Auto-generated method stub
-		
+
+		Response responseObject = new Response();
+		responseObject.setSessionAttributes(sessionAttributes);
+		DialogAction dialogAction = new DialogAction();
+		dialogAction.setType("Delegate");
+		dialogAction.setSlots(slots);
+		responseObject.setDialogAction(dialogAction);
+		return responseObject;
 	}
+
+	private Response close(Map<String, String> sessionAttributes, String fulfillmentState,Message message)
+	{
+		Response responseObject = new Response();
+		responseObject.setSessionAttributes(sessionAttributes);
+		DialogAction dialogAction = new DialogAction();
+		dialogAction.setType("Close");
+		dialogAction.setFulfillmentState(fulfillmentState);
+		dialogAction.setMessage(message);
+		responseObject.setDialogAction(dialogAction);
+		return responseObject;
+	}
+
 	private Response elicitSlot(Map<String, String> sessionAttributes,
 													String intentName,
 													Slots slots,
