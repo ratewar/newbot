@@ -13,8 +13,6 @@ public class DialogAction {
 	private Slots slots;
 	private String slotToElicit;
 	private ResponseCard responseCard;
-	private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-
 	public String getType() {
 		return type;
 	}
@@ -45,14 +43,6 @@ public class DialogAction {
 
 	public void setResponseCard(ResponseCard responseCard) {
 		this.responseCard = responseCard;
-	}
-
-	public Map<String, Object> getAdditionalProperties() {
-		return this.additionalProperties;
-	}
-
-	public void setAdditionalProperty(String name, Object value) {
-		this.additionalProperties.put(name, value);
 	}
 
 	public String getIntentName() {

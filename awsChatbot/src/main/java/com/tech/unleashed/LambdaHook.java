@@ -20,7 +20,7 @@ import com.tech.unleashed.pojo.response.ValidationResult;
 
 public class LambdaHook implements RequestHandler<Request, Response> {
 	LambdaLogger logger;
-	private ValidationResult validateOrderFlowers(String flowerType, String date, String time){
+	public ValidationResult validateOrderFlowers(String flowerType, String date, String time){
 		List<String> flowerTypes = getFlowerTypes();
 		if (flowerType == null || !flowerTypes.contains(flowerType.toLowerCase())){
 	        return buildValidationResult(false, "FlowerType", "We do not have " + flowerType + ", would you like a different type of flower?  Our most popular flowers are roses");
@@ -57,7 +57,7 @@ public class LambdaHook implements RequestHandler<Request, Response> {
 		flowerTypes.add("tulips");
 		return flowerTypes;
 	}
-	private boolean isValidDate(String date) {
+	public boolean isValidDate(String date) {
 	    try {
 	    	parseDate(date);
 	    	return true;
@@ -65,7 +65,7 @@ public class LambdaHook implements RequestHandler<Request, Response> {
 	        return false;
 	    }
 	}
-	private Date parseDate(String date) {
+	public Date parseDate(String date) {
 		Date date1 = null;
 		try {
 	    	date1 = new SimpleDateFormat("dd-MMM-yyyy").parse(date);
@@ -137,7 +137,7 @@ public class LambdaHook implements RequestHandler<Request, Response> {
 						"Fulfilled",
 						"Thanks, your order for " + flowerType + " has been placed and will be ready for pickup by " + time + " on " + date);
 	}
-	private Response close(Map<String, String> outputSessionAttributes, String fulfillmentState,String messageContent)
+	public Response close(Map<String, String> outputSessionAttributes, String fulfillmentState,String messageContent)
 	{
 		Response responseObject = new Response();
 		responseObject.setSessionAttributes(outputSessionAttributes);
@@ -151,7 +151,7 @@ public class LambdaHook implements RequestHandler<Request, Response> {
 		responseObject.setDialogAction(dialogAction);
 		return responseObject;
 	}
-	private Response delegate(Map<String, String> outputSessionAttributes, Slots slots) {
+	public Response delegate(Map<String, String> outputSessionAttributes, Slots slots) {
 		Response responseObject = new Response();
 		responseObject.setSessionAttributes(outputSessionAttributes);
 		DialogAction dialogAction = new DialogAction();
@@ -160,7 +160,7 @@ public class LambdaHook implements RequestHandler<Request, Response> {
 		responseObject.setDialogAction(dialogAction);
 		return responseObject;
 	}
-	private Response elicitSlot(Map<String, String> sessionAttributes,
+	public Response elicitSlot(Map<String, String> sessionAttributes,
 													String intentName,
 													Slots slots,
 													String violatedSlot,
@@ -204,7 +204,7 @@ public class LambdaHook implements RequestHandler<Request, Response> {
 	 * @return String containing the context parameters.
 	 */
 	  public static String contextToString(Context context) {
-		  //this is a sample code
+		//this is a sample code
 	    StringBuilder sb = new StringBuilder();
 	    sb.append("{awsRequestId=").append(context.getAwsRequestId()).append("},");
 	    sb.append("{functionName=").append(context.getFunctionName()).append("},");
